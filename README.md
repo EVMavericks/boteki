@@ -4,11 +4,8 @@ Simple Discord bot to automate dOrg tweets through emoji votes.
 
 
 ## Variables
-```
-approval_window=7 #days
-required_votes=3 #people needed to vote in favor for tweeting
+Set up variables on the config.py file
 
-```
 ## Process:
 
 1. Connect Discord bot through official API.

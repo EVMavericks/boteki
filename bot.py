@@ -16,7 +16,15 @@ bot = commands.Bot(command_prefix='!')
 async def nine_nine(ctx):
 
     # This line should turn into an explanatory 
-    response = 'I\'m a bot and i will eb able to tweet'
+    response = f""" I am a custom bot.
+
+    This tweet is now up for vote! React with :+1: or :-1: Tweets will be automatically published when they 
+    ```markdown
+    {ctx.message.content}
+    ```
+    """
+    print("Incomming command: ", ctx.message.content)
+    print("Setting up discord vote.")
     await ctx.send(response)
 
 bot.run(TOKEN)
