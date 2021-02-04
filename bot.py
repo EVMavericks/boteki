@@ -4,21 +4,19 @@ import discord
 import tweepy
 from dotenv import load_dotenv
 
+from discord.ext import commands
+
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='!')
 
-@client.event
-async def on_ready():
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
+@bot.command(name='tweet')
+async def nine_nine(ctx):
 
-    print(
-        f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})'
-    )
+    # This line should turn into an explanatory 
+    response = 'I\'m a bot and i will eb able to tweet'
+    await ctx.send(response)
 
-client.run(TOKEN)
+bot.run(TOKEN)
