@@ -2,6 +2,7 @@ import os
 import datetime
 import discord
 import tweepy
+import config
 from dotenv import load_dotenv
 
 from discord.ext import commands
@@ -16,15 +17,29 @@ bot = commands.Bot(command_prefix='!')
 async def nine_nine(ctx):
 
     # This line should turn into an explanatory 
-    response = f""" I am a custom bot.
-
-    This tweet is now up for vote! React with :+1: or :-1: Tweets will be automatically published when they 
+    response = f"""
+    :fire: **Vote Started**
+    React with :+1:  or :-1: to publish or skip the tweet.
+    Tweets with a net socre of {config.required_score} points within {config.approval_window} days will be published automatically.
     ```markdown
-    {ctx.message.content}
+    {ctx.message.content[7:]}
     ```
     """
     print("Incomming command: ", ctx.message.content)
     print("Setting up discord vote.")
-    await ctx.send(response)
+
+    emojis = ["👍", "👎", "📮"]
+    tweetBot = bot.get_channel(806923512270422016)
+
+    print(" ~ Sending Message")
+    poll = await tweetBot.send(response)
+
+    print(" ~ Adding Reactions")
+    for emoji in emojis:
+        await poll.add_reaction(emoji)
+
+    ## Now there must be a vote emoticon set for easy votes
+    print(poll.message)
+    print(poll.message.reactions)
 
 bot.run(TOKEN)
