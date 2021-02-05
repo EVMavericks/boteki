@@ -1,15 +1,8 @@
-import asyncio
-import os
-import datetime
+import os, asyncio
+import config, mongo
 import discord
-import tweepy
-import config
-from dotenv import load_dotenv
-import mongo
-
 from discord.ext import commands
-
-
+from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -17,11 +10,20 @@ bot = commands.Bot(command_prefix='!')
 
 @bot.command(name='tweet')
 async def twitterPoll(ctx):
-    # Define tweet contents
+    """
+    Creates a tweet object in the mongo database.
+    Logs the message ID for future evaluation and posts to twitter.
+    """
+
+    # Define contents of the tweet that will be voted
     tweetText = ctx.message.content[7:]
     messageObject = ctx.message
 
-    # What will the Bot answer through Discord:
+    # Format data and upload to database
+    tweetObject = mongo.newTweetObject(tweetText, messageObject)
+    mongo.submit_tweet(tweetObject)
+
+    # Bot Responds through Discord and starts the vote:
     response = f"""\n
     :fire: **Vote Started**
     React with :+1:  or :-1: to publish or skip the tweet.
@@ -31,13 +33,9 @@ async def twitterPoll(ctx):
     ```
     """
 
-    # Format data and upload to database
-    tweetObject = mongo.newTweetObject(tweetText, messageObject)
-    mongo.submit_tweet(tweetObject)
-
     print(">> Incomming command: ", ctx.message.content)
     print(" ~ Setting up discord vote.")
-    tweetBot = bot.get_channel(806923512270422016)
+    tweetBot = bot.get_channel(806923512270422016)   #TODO: change the channel to be dynamic
 
     print(" ~ Sending Voting Message")
     poll = await tweetBot.send(response)
@@ -61,13 +59,13 @@ async def twitterPoll(ctx):
 @bot.command(name='validate')
 async def validateTweets(ctx):
     """
-    Async conjob that queries all tweets logged on the database.
+    Async conjob, called on demand, that queries all tweets logged on the database.
     Filters tweets that are 'pending', and calculates scores.
     Approved tweets will trigger a tweet and update db function.
     """
 
     print(" ~ Sending Verification Message")
-    tweetBot = bot.get_channel(806923512270422016)
+    tweetBot = bot.get_channel(806923512270422016)   #TODO: change the channel to be dynamic
     await tweetBot.send("""Alright . . . Checking the tweets proposed. Currently received ## tweets total""")
 
     for tweet in mongo.db.tweets.find():

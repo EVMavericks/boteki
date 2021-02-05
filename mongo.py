@@ -41,12 +41,20 @@ def submit_tweet(tweetObject):
 
 # %%
 db.tweets.count()
+# %%
+def nukeDB():
+    cursor = db.tweets.find({})
+
+    for element in cursor:
+        print(element)
+        db.tweets.delete_many( {'_id': element['_id']} )
+
+    print(' ~ Deleted all tweets on database')
 
 # %%
 
+# %%
 
-
-
-
+print(f"mongodb+srv://rihp:{ATLAS}@messenger-api.lq6n5.mongodb.net/{MONGO_DB_NAME}?retryWrites=true&w=majority")
 
 # %%
