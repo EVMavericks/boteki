@@ -1,6 +1,7 @@
 # %% 
 from pymongo import MongoClient
 from dotenv import load_dotenv
+import os
 load_dotenv()
 
 ATLAS = os.getenv('ATLAS')
@@ -17,26 +18,35 @@ db = connect()
 
 #%%
 
-tweet =  {
-     'author':'discord_user_id',
-     'content':'',
-     'discord_message_id':'',
-     'score': 0,
-     'result': ['pending', 'passed', 'rejected']
- }
+def newTweetObject(tweetText, messageObject):
 
-def submit_tweet(tweet):
-    db.tw
-    post_id = db.tweets.insert_one(tweet).inserted_id
+    # Get Author
+    # Get Tweet Text
+    # Get Score
+
+    tweetObject =  {
+        '_id': f'{messageObject.id}',
+        'author': f'{messageObject.author}',
+        'content': f'{tweetText}',
+        'reactions': f'{messageObject.reactions}',
+        'created_at': f'{messageObject.created_at}',
+        'status': 'pending',
+    }
+    return tweetObject
+
+def submit_tweet(tweetObject):
+    post_id = db.tweets.insert_one(tweetObject).inserted_id
     print(post_id)    
     return post_id
 
-submit_tweet(tweet)
 # %%
-db.list_collection_names()
+db.tweets.count()
 
 # %%
 
-db.tweets.find_one()
+
+
+
+
 
 # %%
