@@ -1,5 +1,5 @@
 import os, asyncio
-import config, mongo
+import config, mongo, tweetClient
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -51,10 +51,16 @@ async def twitterPoll(ctx):
     
     ## Now there must be a vote emoticon set for easy votes
     print(" ~ About to sleep and check reactions")
-    asyncio.sleep(10)
+    await asyncio.sleep(10)
     vote_results = await tweetBot.fetch_message(poll.id)
     print(f"{vote_results=}")
     print(f"{vote_results.reactions=}")
+    print(f"{vote_results.reactions=}")
+
+    # This sends the tweet through tweepy.
+    #print(f" ~ Sending {tweetText=}")
+    # tweetClient.tweet_send(tweetText)
+
 
 @bot.command(name='validate')
 async def validateTweets(ctx):
@@ -66,12 +72,15 @@ async def validateTweets(ctx):
 
     print(" ~ Sending Verification Message")
     tweetBot = bot.get_channel(806923512270422016)   #TODO: change the channel to be dynamic
-    await tweetBot.send("""Alright . . . Checking the tweets proposed. Currently received ## tweets total""")
+    await tweetBot.send(f"""Alright . . . Checking the tweets proposed. Currently received {mongo.count_submissions()} tweets total""")
 
     for tweet in mongo.db.tweets.find():
         print(f"{tweet=}")
         print(f"{tweet['_id']}")
-        await tweetBot.fetch_message(tweet['_id'])            
+        newstatus = await tweetBot.fetch_message(tweet['_id'])            
+        print(newstatus)
+
+        
 
     # def check(reaction, user):
     #     return user == poll.author and str(reaction.emoji) == '👍'
