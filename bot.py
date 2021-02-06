@@ -8,6 +8,12 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
 
+
+@bot.command(name='plznuke')
+async def validateTweets(ctx):
+    mongo.nukeDB()
+    await bot.get_channel(806923512270422016).send("reset db done")
+
 @bot.command(name='tweet')
 async def twitterPoll(ctx):
     """
@@ -18,10 +24,6 @@ async def twitterPoll(ctx):
     # Define contents of the tweet that will be voted
     tweetText = ctx.message.content[7:]
     messageObject = ctx.message
-
-    # Format data and upload to database
-    tweetObject = mongo.newTweetObject(tweetText, messageObject)
-    mongo.submit_tweet(tweetObject)
 
     # Bot Responds through Discord and starts the vote:
     response = f"""\n
@@ -37,30 +39,31 @@ async def twitterPoll(ctx):
     print(" ~ Setting up discord vote.")
     tweetBot = bot.get_channel(806923512270422016)   #TODO: change the channel to be dynamic
 
-    print(" ~ Sending Voting Message")
+    print(" ~@ Sending Voting Message")
     poll = await tweetBot.send(response)
+    print(poll)
 
     print(" ~ Adding Reactions")
     emojis = ["👍", "👎"]
 
     for emoji in emojis:
         await poll.add_reaction(emoji)
+
+    # Format data and upload to database
+    tweetObject = mongo.newTweetObject(tweetText, messageObject, poll)
+    mongo.submit_tweet(tweetObject)
     
-    print(poll)
-    print(f"{poll.id=}")
-    
-    ## Now there must be a vote emoticon set for easy votes
-    print(" ~ About to sleep and check reactions")
-    await asyncio.sleep(10)
-    vote_results = await tweetBot.fetch_message(poll.id)
-    print(f"{vote_results=}")
-    print(f"{vote_results.reactions=}")
-    print(f"{vote_results.reactions=}")
+    # ## Now there must be a vote emoticon set for easy votes
+    # print(" ~ About to sleep and check reactions")
+    # await asyncio.sleep(2)
+    # vote_results = await tweetBot.fetch_message(poll.id)
+    # print(f"{vote_results=}")
+    # print(f"{vote_results.reactions=}")
+    # print(f"{vote_results.reactions=}")
 
     # This sends the tweet through tweepy.
     #print(f" ~ Sending {tweetText=}")
     # tweetClient.tweet_send(tweetText)
-
 
 @bot.command(name='validate')
 async def validateTweets(ctx):
@@ -76,20 +79,26 @@ async def validateTweets(ctx):
 
     for tweet in mongo.db.tweets.find():
         print(f"{tweet=}")
-        print(f"{tweet['_id']}")
-        newstatus = await tweetBot.fetch_message(tweet['_id'])            
-        print(newstatus)
+        print(f"{tweet['_id']=}")
+        print(f"{type(tweet['_id'])=}")
+        print(f"{tweet['reactions']}")
+
+        newstatus = await tweetBot.fetch_message(int(tweet['poll']))            
+        print(newstatus.reactions)
+
+    def update_reactions(_id):
+        """
+        Receive original message _id
+        updates the reactions re
+        """    
+
+        # Original message ID
+        myquery= {"_id" : _id}
+
+        # Poll message
+        newvalues = {"poll_id":poll_id}
+        pymongo.update_one(myquery, newvalues)
 
         
-
-    # def check(reaction, user):
-    #     return user == poll.author and str(reaction.emoji) == '👍'
-
-    # try:
-    #     reaction, user = await tweetBot.wait_for('reaction_add', timeout=5.0, check=check)
-    # except asyncio.TimeoutError:
-    #     await tweetBot.send('👎')
-    # else:
-    #     await tweetBot.send('👍')
 
 bot.run(TOKEN)

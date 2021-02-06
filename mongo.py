@@ -18,14 +18,15 @@ db = connect()
 
 #%%
 
-def newTweetObject(tweetText, messageObject):
+def newTweetObject(tweetText, messageObject, poll):
 
     # Get Author
     # Get Tweet Text
     # Get Score
 
     tweetObject =  {
-        '_id': f'{messageObject.id}',
+        '_id': int(messageObject.id),
+        'poll': int(poll.id),
         'author': f'{messageObject.author}',
         'content': f'{tweetText}',
         'reactions': f'{messageObject.reactions}',
@@ -52,8 +53,7 @@ def nukeDB():
 
     print(' ~ Deleted all tweets on database')
 
-# %%
-nukeDB()
+
 # %%
 
 print(f"mongodb+srv://rihp:{ATLAS}@messenger-api.lq6n5.mongodb.net/{MONGO_DB_NAME}?retryWrites=true&w=majority")
