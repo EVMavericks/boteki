@@ -87,13 +87,11 @@ async def validateTweets(ctx):
         results = democratic.count_votes(f"{newstatus.reactions}")
         net_score = democratic.net_score(results)
 
-        # TODO : must now do an if clause.
-
         if net_score >= config.required_score:
             
             await tweetBot.send(f"This tweet has a `net_score` of {net_score}, which is compliant with the minimum publish threshold of {config.required_score} points in favor.")
             await tweetBot.send(f"```\n{tweet['content']}\n```")
-            await tweetBot.send(f"At this point, Boteki publishes the tweet `{_id=}` and with the content string:\n```{tweet['content']=}```")
+            await tweetBot.send(f"At this point, Boteki publishes the tweet `{tweet['_id']=}` and with the content string:\n```{tweet['content']=}```")
         else: print(f"{netscore=}")
 
         # Turn the net score into a publish or pass action to twitter API.
