@@ -83,7 +83,7 @@ async def validateTweets(ctx):
 
     for tweet in mongo.db.tweets.find():
         print(f"{tweet=}")
-        newstatus = await bot.get_channel(messageObject.channel.id).fetch_message(int(tweet['poll']))            
+        newstatus = await bot.get_channel(tweet['channel']).fetch_message(int(tweet['poll']))            
         results = democratic.count_votes(f"{newstatus.reactions}")
         net_score = democratic.net_score(results)
 
