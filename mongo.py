@@ -26,6 +26,7 @@ def newTweetObject(tweetText, messageObject, poll):
 
     tweetObject =  {
         '_id': int(messageObject.id),
+        'channel': messageObject.channel.id,
         'poll': int(poll.id),
         'author': f'{messageObject.author}',
         'content': f'{tweetText}',

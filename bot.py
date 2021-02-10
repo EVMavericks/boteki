@@ -1,5 +1,5 @@
 import os, asyncio
-import config, mongo, tweetClient
+import config, mongo, tweetClient, democratic
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix='!')
 @bot.command(name='plznuke')
 async def validateTweets(ctx):
     mongo.nukeDB()
-    await bot.get_channel(806923512270422016).send("reset db done")
+    await  bot.get_channel(ctx.message.channel.id).send("reset db done")
 
 @bot.command(name='tweet')
 async def twitterPoll(ctx):
@@ -37,7 +37,9 @@ async def twitterPoll(ctx):
 
     print(">> Incomming command: ", ctx.message.content)
     print(" ~ Setting up discord vote.")
-    tweetBot = bot.get_channel(806923512270422016)   #TODO: change the channel to be dynamic
+    print(messageObject)
+    tweetBot = bot.get_channel(messageObject.channel.id)   #TODO: change the channel to be dynamic
+    # tweetBot = bot.get_channel(806923512270422016)   
 
     print(" ~@ Sending Voting Message")
     poll = await tweetBot.send(response)
@@ -74,17 +76,28 @@ async def validateTweets(ctx):
     """
 
     print(" ~ Sending Verification Message")
-    tweetBot = bot.get_channel(806923512270422016)   #TODO: change the channel to be dynamic
+    messageObject = ctx.message
+
+    tweetBot = bot.get_channel(messageObject.channel.id)   #this line makes the command work across channels
     await tweetBot.send(f"""Alright . . . Checking the tweets proposed. Currently received {mongo.count_submissions()} tweets total""")
 
     for tweet in mongo.db.tweets.find():
         print(f"{tweet=}")
-        print(f"{tweet['_id']=}")
-        print(f"{type(tweet['_id'])=}")
-        print(f"{tweet['reactions']}")
+        newstatus = await bot.get_channel(messageObject.channel.id).fetch_message(int(tweet['poll']))            
+        results = democratic.count_votes(f"{newstatus.reactions}")
+        net_score = democratic.net_score(results)
 
-        newstatus = await tweetBot.fetch_message(int(tweet['poll']))            
-        print(newstatus.reactions)
+        # TODO : must now do an if clause.
+
+        if net_score >= config.required_score:
+            
+            await tweetBot.send(f"This tweet has a `net_score` of {net_score}, which is compliant with the minimum publish threshold of {config.required_score} points in favor.")
+            await tweetBot.send(f"```\n{tweet['content']}\n```")
+            await tweetBot.send(f"At this point, Boteki publishes the tweet `{_id=}` and with the content string:\n```{tweet['content']=}```")
+        else: print(f"{netscore=}")
+
+        # Turn the net score into a publish or pass action to twitter API.
+        # Also, the mongo tweet status must be updated to 'published'
 
     def update_reactions(_id):
         """
@@ -100,5 +113,4 @@ async def validateTweets(ctx):
         pymongo.update_one(myquery, newvalues)
 
         
-
 bot.run(TOKEN)
