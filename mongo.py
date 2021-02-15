@@ -1,5 +1,6 @@
 # %% 
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument 
+
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -41,6 +42,16 @@ def submit_tweet(tweetObject):
     print(post_id)    
     return post_id
 
+def confirm_tweet(_id, sent_tweet_url):
+    """
+    Update a object in the database after tweeting it
+    """
+    new_object = db.tweets.find_one_and_update({'_id': _id},
+                                { '$set': { "status" : "tweeted"} },  
+                                #TODO: This database should keep the URL of the tweet sent 
+                                )
+    return new_object
+
 # %%
 def count_submissions():
     return db.tweets.count()
@@ -54,21 +65,14 @@ def nukeDB():
 
     print(' ~ Deleted all tweets on database')
 
+# %%
+
+_id = 810956513887780875
 
 # %%
 
-print(f"mongodb+srv://rihp:{ATLAS}@messenger-api.lq6n5.mongodb.net/{MONGO_DB_NAME}?retryWrites=true&w=majority")
-
+confirm_tweet(_id, 'url')
 # %%
-
-# def tweetValidate():
-#     # Query id of tweets submitted
-#     for tweet in db.tweets.find({}):
-#         print (tweet["_id"])
-
-#     # Update message values:
-
-
-# tweetValidate()
+db.tweets.find_one({'_id': _id})
 
 # %%

@@ -17,7 +17,8 @@ Auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 TwitterBot = API(Auth)
 
 def tweet_send(msg):
-    TwitterBot.update_status(msg)
+    return TwitterBot.update_status(msg)
+
 
 def tweet_format(json):
     msg = f"""Ethereum Gas Monitor 👽 
