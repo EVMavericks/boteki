@@ -95,36 +95,26 @@ async def validateTweets(ctx):
 
         if net_score >= config.required_score: 
             
-            await tweetBot.send(f"This tweet has a `net_score` of {net_score}, which is compliant with the minimum publish threshold of {config.required_score} points in favor.")
-            await tweetBot.send(f"```\n{tweet['content']}\n```")
-            #await tweetBot.send(f"At this point, Boteki publishes the tweet `{tweet['_id']=}` and with the content string:\n```{tweet['content']=}```")
-       
             # This sends the tweet through tweepy.
-            sent_tweet_url = tweetClient.tweet_send(tweet['content'])
-        
-            # TODO: change mongo document to {"status":"tweeted"}
-            mongo.confirm_tweet(tweet['_id'], sent_tweet_url)
-            await tweetBot.send(f"Tweet above has been sent and database object updated.")
+            try:
+                await tweetBot.send(f"This tweet has a `net_score` of {net_score}, which is compliant with the minimum publish threshold of {config.required_score} points in favor.")
+                await tweetBot.send(f"```\n{tweet['content']}\n```")
+                response = tweetClient.tweet_send(tweet['content'])._json
+            except Exception as e:
+                await tweetBot.send(f"error occurred when sending tweet:\n{e}")
 
-        else: print(f"{net_score=}")
+            # TODO: change mongo document to include the new tweet's URL and also include the new net_score 
+            print(f"{response['id']=}")
+            
+            mongo.confirm_tweet(tweet['_id'], response)
+            await tweetBot.send(f"Tweet above has been sent (https://twitter.com/twitter/statuses/{response['id']}) and database object updated.")
+
+        else: print(f" ~ Tweet skipped with a {net_score=}")
 
         # Turn the net score into a publish or pass action to twitter API.
         # Also, the mongo tweet status must be updated to 'published'
     await tweetBot.send(f"done validating :)")
 
-
-    def update_reactions(_id):
-        """
-        Receive original message _id
-        updates the reactions re
-        """    
-
-        # Original message ID
-        myquery= {"_id" : _id}
-
-        # Poll message
-        newvalues = {"poll_id":poll_id}
-        pymongo.update_one(myquery, newvalues)
 
         
 bot.run(TOKEN)

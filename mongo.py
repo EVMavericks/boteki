@@ -42,12 +42,13 @@ def submit_tweet(tweetObject):
     print(post_id)    
     return post_id
 
-def confirm_tweet(_id, sent_tweet_url):
+def confirm_tweet(_id, response):
     """
     Update a object in the database after tweeting it
     """
     new_object = db.tweets.find_one_and_update({'_id': _id},
-                                { '$set': { "status" : "tweeted"} },  
+                                { '$set': { "status" : "tweeted",
+                                            "response": response} },  
                                 #TODO: This database should keep the URL of the tweet sent 
                                 )
     return new_object
