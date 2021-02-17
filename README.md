@@ -32,15 +32,14 @@ Set up variables on the config.py file, also create a .env with discord, modgo a
 - [x] Receinve `!tweet` specific commands on Discord #Twitter channel.
 - [x] Log tweets to a MongoAtlas cloud server. 
 - [x] Query database for received tweets.
-- [ ] Created basic `mongo.py` to interact with the cloud server
+- [x] Created basic `mongo.py` to interact with the cloud server
 - [x] Create a function to nuke the database if needed `mogo.nukeDB()`
 - [ ] Update data on tweets with the `!validate` command
-
+- [x] Connect to Twitter through Tweepy
+- [x] Add tweets to queue when `!validate` is called () 
 
 **Next step:**
-- [ ] Connect to Twitter through Tweepy
 - [ ] Create a queue of tweets to post
-- [ ] Add tweets to queue when `!validate` is called
 - [ ] Try to link to hubspot profiles and ethereum addresses
 - [ ] Confirm tweet length and other error handling
 - [ ] Make this reproducible witha docker container
