@@ -1,3 +1,5 @@
 pymongo
 tweepy
 python-dotenv
+dnspython
+discord.py
