@@ -17,7 +17,7 @@ TWITTER_CLIENT=twitterkey
 ATLAS=database
 MONGO_DB_NAME=collection  
 ```
-3. Deploy the Docker container with the command `TODO`, or  this will run the bot with `python3 bot.py` and install necessary dependencies.
+3. Deploy the Docker container with the command `docker build -t boteki .` and `docker run boteki`, or  this will run the bot with `python3 bot.py` and install necessary dependencies.
 
 Once the bot is running you can call the following commands:
  - `!tweet` : Set up an emoji vote poll of the tweett and log it in a database
@@ -41,12 +41,9 @@ Set up variables on the config.py file, also create a .env with discord, modgo a
 - [x] Confirm tweet length and other error handling
 - [x] Make this reproducible witha docker container
 
-**Next step:**
+**Next steps:**
 - [ ] Create a queue of tweets to post
+- [ ] create a `!preview`command to show the queued tweets before sending them
 - [ ] Try to link to hubspot profiles and ethereum addresses
 - [ ] Docker requirements version 
-
-
-1. AUTO-Tweet
- - Cronjob to check backlog of tweets
- - If tweet _id has enough votes and has not been tweeted,
+- [ ] Bash script that builds the docker image and runs it
