@@ -27,6 +27,7 @@ async def twitterPoll(ctx):
     tweetText = ctx.message.content[7:]
     messageObject = ctx.message
 
+ 
     # Bot Responds through Discord and starts the vote:
     response = f"""\n
     :fire: **Vote Started**
@@ -42,6 +43,11 @@ async def twitterPoll(ctx):
     print(messageObject)
     tweetBot = bot.get_channel(messageObject.channel.id)   #TODO: change the channel to be dynamic
     # tweetBot = bot.get_channel(806923512270422016)   
+
+    # Verify tweet integrity and return error message if needed
+    if len(tweetText) >=240:
+        error = await tweetBot.send('Your tweet exceeds the maximum character length. Try again. Max 240 characters.')
+        return error
 
     print(" ~@ Sending Voting Message")
     poll = await tweetBot.send(response)

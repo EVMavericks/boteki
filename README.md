@@ -1,12 +1,12 @@
 # Boteki
 Simple versatile Discord bot to automate dOrg tweets through emoji votes.
 
+You can Deploy on your own cloud using docker.
 
 # Get started
 
-1. Python 3.8 or higher is needed `python3 --version`
-1. clone the repo 
-1. set your `.env` file with these variables
+1. Clone the repo 
+2. Set your `.env` file with these variables
 ```
 DISCORD_TOKEN=yourdiscordtoken
 DISCORD_GUILD=name of your server
@@ -17,16 +17,17 @@ TWITTER_CLIENT=twitterkey
 ATLAS=database
 MONGO_DB_NAME=collection  
 ```
-2. run the bot with `python3 bot.py` and install necessary dependencies.
+3. Deploy the Docker container with the command `TODO`, or  this will run the bot with `python3 bot.py` and install necessary dependencies.
 
 Once the bot is running you can call the following commands:
  - `!tweet` : Set up an emoji vote poll of the tweett and log it in a database
- - `!validate` looks up all the tweets logged on the database, updates the score if possible, and tweets or schedules the tweet.
-
+ - `!validate`: looks up all the tweets logged on the database, updates the score if possible, and tweets or schedules the tweet.
+ - `!plznuke`: resets the existing database. use this if the bot breaks during development. Remove this function from the bot before bringing to production to avoid trouble.
+  
 ## Variables
 Set up variables on the config.py file, also create a .env with discord, modgo atlas and twitter keys.
 
-## Process:
+## Functionalities:
 
 - [x] Connect Discord bot through official API.
 - [x] Receinve `!tweet` specific commands on Discord #Twitter channel.
@@ -34,15 +35,17 @@ Set up variables on the config.py file, also create a .env with discord, modgo a
 - [x] Query database for received tweets.
 - [x] Created basic `mongo.py` to interact with the cloud server
 - [x] Create a function to nuke the database if needed `mogo.nukeDB()`
-- [ ] Update data on tweets with the `!validate` command
+- [x] Update data on tweets with the `!validate` command
 - [x] Connect to Twitter through Tweepy
 - [x] Add tweets to queue when `!validate` is called () 
+- [x] Confirm tweet length and other error handling
+- [x] Make this reproducible witha docker container
 
 **Next step:**
 - [ ] Create a queue of tweets to post
 - [ ] Try to link to hubspot profiles and ethereum addresses
-- [ ] Confirm tweet length and other error handling
-- [ ] Make this reproducible witha docker container
+- [ ] Docker requirements version 
+
 
 1. AUTO-Tweet
  - Cronjob to check backlog of tweets
