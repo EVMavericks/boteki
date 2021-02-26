@@ -1,5 +1,5 @@
 # Boteki
-Simple versatile Discord bot to automate dOrg tweets through emoji votes.
+Simple versatile Discord bot to automate [dOrg](https://dorg.tech) tweets through emoji votes. 
 You can deploy on your own cloud using docker.
 
 ![sample usecase of boteki](images/sample.png)
@@ -7,10 +7,10 @@ You can deploy on your own cloud using docker.
 # Get started
 
 1. Get API keys for Twitter
-1. Set up bot account and add to your server
-1. Create MongoAtlas database and configure connections
+1. Set up Discord Bot account and add it to your server. Make sure roles and permissions allow the bot to see the channel where you're sending your commands.
+1. Create a MongoAtlas database and configure connections.
 
-1. Clone the repo 
+1. Clone this repo 
 1. Set your `.env` file with these variables, 
 ```
 DISCORD_TOKEN=yourdiscordtoken
@@ -22,12 +22,12 @@ TWITTER_CLIENT=twitterkey
 ATLAS=database
 MONGO_DB_NAME=collection  
 ```
-1. Deploy the Docker container with the command `docker build -t boteki .` and `docker run boteki`, or  this will run the bot with `python3 bot.py` and install necessary dependencies.
+1. Deploy the Docker container with the command `docker build -t boteki .` and `docker run boteki`.
 
 Once the bot is running you can call the following commands:
  - `!tweet` : Set up an emoji vote poll of the tweett and log it in a database
- - `!validate`: looks up all the tweets logged on the database, updates the score if possible, and tweets or schedules the tweet.
- - `!plznuke`: resets the existing database. use this if the bot breaks during development. Remove this function from the bot before bringing to production to avoid trouble.
+ - `!validate`: Looks up all the tweets logged on the database, updates the score if possible, and tweets or schedules the tweet.
+ - `!plznuke`: Resets the existing database. use this if the bot breaks during development. Remove this function from the bot before bringing to production to avoid trouble.
   
 ## Variables
 Set up variables on the config.py file, also create a .env with discord, modgo atlas and twitter keys.
