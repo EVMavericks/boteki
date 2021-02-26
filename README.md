@@ -2,10 +2,9 @@
 Simple versatile Discord bot to automate dOrg tweets through emoji votes.
 You can deploy on your own cloud using docker.
 
-![images/sample.png]
+![sample usecase of boteki](images/sample.png)
 
 # Get started
-
 
 1. Get API keys for Twitter
 1. Set up bot account and add to your server
@@ -53,3 +52,4 @@ Set up variables on the config.py file, also create a .env with discord, modgo a
 - [ ] Try to link to hubspot profiles and ethereum addresses
 - [ ] Establish versions to the Docker requirements to reproduce correct builds
 - [ ] Bash script that builds the docker image and runs it
+- [ ] Update mongo documents with link to succesfully posted tweets

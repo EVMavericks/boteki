@@ -65,15 +65,3 @@ def nukeDB():
         db.tweets.delete_many( {'_id': element['_id']} )
 
     print(' ~ Deleted all tweets on database')
-
-# %%
-
-_id = 810956513887780875
-
-# %%
-
-confirm_tweet(_id, 'url')
-# %%
-db.tweets.find_one({'_id': _id})
-
-# %%

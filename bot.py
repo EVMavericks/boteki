@@ -10,7 +10,6 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
 
-
 @bot.command(name='plznuke')
 async def validateTweets(ctx):
     mongo.nukeDB()
@@ -27,12 +26,10 @@ async def twitterPoll(ctx):
     tweetText = ctx.message.content[7:]
     messageObject = ctx.message
 
- 
     # Bot Responds through Discord and starts the vote:
     response = f"""\n
-    :fire: **Vote Started**
-    React with :+1:  or :-1: to publish or skip the tweet.
-    Tweets with a net socre of {config.required_score} points within {config.approval_window} days will be published automatically.
+    :fire: **Vote Started**: react with :+1:  or :-1: to publish or skip the tweet.
+    Tweets with a net socre of {config.required_score} points will be published when the `!validate` command is called.
     ```markdown
     {tweetText}
     ```
@@ -41,8 +38,7 @@ async def twitterPoll(ctx):
     print(">> Incomming command: ", ctx.message.content)
     print(" ~ Setting up discord vote.")
     print(messageObject)
-    tweetBot = bot.get_channel(messageObject.channel.id)   #TODO: change the channel to be dynamic
-    # tweetBot = bot.get_channel(806923512270422016)   
+    tweetBot = bot.get_channel(messageObject.channel.id)  
 
     # Verify tweet integrity and return error message if needed
     if len(tweetText) >=240:
@@ -63,15 +59,6 @@ async def twitterPoll(ctx):
     tweetObject = mongo.newTweetObject(tweetText, messageObject, poll)
     mongo.submit_tweet(tweetObject)
     
-    # ## Now there must be a vote emoticon set for easy votes
-    # print(" ~ About to sleep and check reactions")
-    # await asyncio.sleep(2)
-    # vote_results = await tweetBot.fetch_message(poll.id)
-    # print(f"{vote_results=}")
-    # print(f"{vote_results.reactions=}")
-    # print(f"{vote_results.reactions=}")
-
-    
 @bot.command(name='validate')
 async def validateTweets(ctx):
     """
@@ -88,16 +75,11 @@ async def validateTweets(ctx):
     await tweetBot.send(f"""Alright . . . Checking the tweets proposed. Currently received {mongo.count_submissions()} tweets total""")
 
     for tweet in mongo.db.tweets.find({'status':'pending'}):
+        
         print(f"{tweet=}")
         newstatus = await bot.get_channel(tweet['channel']).fetch_message(int(tweet['poll']))            
         results = democratic.count_votes(f"{newstatus.reactions}")
         net_score = democratic.net_score(results)
-
-        # TODO : Update this function to also check if the tweet is within the correct timeframe (
-        # Consider using the datetime module to turn "2021-02-10 21:19:02.795000" strings into timestamp
-        print(type(tweet['created_at']))
-        tweet['created_at']
-
 
         if net_score >= config.required_score: 
             
@@ -117,10 +99,6 @@ async def validateTweets(ctx):
 
         else: print(f" ~ Tweet skipped with a {net_score=}")
 
-        # Turn the net score into a publish or pass action to twitter API.
-        # Also, the mongo tweet status must be updated to 'published'
     await tweetBot.send(f"done validating :)")
-
-
         
 bot.run(TOKEN)
