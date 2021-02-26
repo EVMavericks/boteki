@@ -1,12 +1,18 @@
 # Boteki
 Simple versatile Discord bot to automate dOrg tweets through emoji votes.
+You can deploy on your own cloud using docker.
 
-You can Deploy on your own cloud using docker.
+![images/sample.png]
 
 # Get started
 
+
+1. Get API keys for Twitter
+1. Set up bot account and add to your server
+1. Create MongoAtlas database and configure connections
+
 1. Clone the repo 
-2. Set your `.env` file with these variables
+1. Set your `.env` file with these variables, 
 ```
 DISCORD_TOKEN=yourdiscordtoken
 DISCORD_GUILD=name of your server
@@ -17,7 +23,7 @@ TWITTER_CLIENT=twitterkey
 ATLAS=database
 MONGO_DB_NAME=collection  
 ```
-3. Deploy the Docker container with the command `docker build -t boteki .` and `docker run boteki`, or  this will run the bot with `python3 bot.py` and install necessary dependencies.
+1. Deploy the Docker container with the command `docker build -t boteki .` and `docker run boteki`, or  this will run the bot with `python3 bot.py` and install necessary dependencies.
 
 Once the bot is running you can call the following commands:
  - `!tweet` : Set up an emoji vote poll of the tweett and log it in a database
@@ -45,5 +51,5 @@ Set up variables on the config.py file, also create a .env with discord, modgo a
 - [ ] Create a queue of tweets to post
 - [ ] create a `!preview`command to show the queued tweets before sending them
 - [ ] Try to link to hubspot profiles and ethereum addresses
-- [ ] Docker requirements version 
+- [ ] Establish versions to the Docker requirements to reproduce correct builds
 - [ ] Bash script that builds the docker image and runs it
