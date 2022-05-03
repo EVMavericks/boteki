@@ -5,12 +5,10 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-ATLAS = os.getenv('ATLAS')
-MONGO_DB_NAME = os.getenv('MONGO_DB_NAME')
-
+ATLAS_CONNECTIONSTRING = os.getenv('ATLAS_CONNECTIONSTRING')
 def connect():
     print("connecting")
-    client = MongoClient(f"mongodb+srv://rihp:{ATLAS}@messenger-api.lq6n5.mongodb.net/{MONGO_DB_NAME}?retryWrites=true&w=majority")
+    client = MongoClient(ATLAS_CONNECTIONSTRING)
     db = client.test
     print("Connected")
     return db
