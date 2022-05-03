@@ -53,7 +53,7 @@ def confirm_tweet(_id, response):
 
 # %%
 def count_submissions():
-    return db.tweets.count()
+    return db.tweets.count_documents({})
 # %%
 def nukeDB():
     cursor = db.tweets.find({})
