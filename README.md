@@ -32,6 +32,17 @@ Once the bot is running you can call the following commands:
 ## Variables
 Set up variables on the config.py file, also create a .env with discord, modgo atlas and twitter keys.
 
+## Multi-tenant
+Multi-tenant is supported!
+
+Steps:
+- Let the bot join Discord.
+- execute !authorize
+- login on twitter and grab the pin
+- execute !pin <pin>
+
+The pin can only be used one time, so you can leave it, but also delete it.
+
 ## Functionalities:
 
 - [x] Connect Discord bot through official API.
