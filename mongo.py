@@ -1,4 +1,3 @@
-# %% 
 from pymongo import MongoClient, ReturnDocument 
 
 from dotenv import load_dotenv
@@ -11,13 +10,12 @@ def connect():
     client = MongoClient(ATLAS_CONNECTIONSTRING)
     db = client.test
     print("Connected")
+
     return db
 
 db = connect()
 
-#%%
-
-def newTweetObject(tweetText, messageObject, poll):
+def newTweetObject(tweetText, messageObject, poll, guild):
 
     # Get Author
     # Get Tweet Text
@@ -32,6 +30,7 @@ def newTweetObject(tweetText, messageObject, poll):
         'reactions': f'{messageObject.reactions}',
         'created_at': f'{messageObject.created_at}',
         'status': 'pending',
+        'guild': guild
     }
     return tweetObject
 
@@ -51,10 +50,9 @@ def confirm_tweet(_id, response):
                                 )
     return new_object
 
-# %%
-def count_submissions():
-    return db.tweets.count_documents({})
-# %%
+def count_submissions(guild):
+    return db.tweets.count_documents({'guild': guild})
+
 def nukeDB():
     cursor = db.tweets.find({})
 
@@ -63,3 +61,20 @@ def nukeDB():
         db.tweets.delete_many( {'_id': element['_id']} )
 
     print(' ~ Deleted all tweets on database')
+
+def add_account(acces_token, acces_token_secret, username, discord_guild):
+    account = {
+        "account" : username,
+        "acces_token" : acces_token,
+        "acces_token_secret" : acces_token_secret,
+        "discord_guild" : discord_guild,
+    }
+
+    print(account)
+    db.accounts.insert_one(account)
+
+
+def get_tokens(discord_guild):
+    account = db.accounts.find_one({"discord_guild": discord_guild})
+
+    return account['acces_token'], account['acces_token_secret']
