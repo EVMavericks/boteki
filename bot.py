@@ -63,7 +63,7 @@ async def twitterPoll(ctx):
     tweetBot = bot.get_channel(messageObject.channel.id)  
 
     # Verify tweet integrity and return error message if needed
-    if len(tweetText) >=240:
+    if len(tweetText) >= 280:
         error = await tweetBot.send('Your tweet exceeds the maximum character length. Try again. Max 240 characters.')
         return error
 
