@@ -51,7 +51,7 @@ async def twitterPoll(ctx):
     # Bot Responds through Discord and starts the vote:
     response = f"""\n
     :fire: **Vote Started**: react with :+1:  or :-1: to publish or skip the tweet.
-    Tweets with a net socre of {config.required_score} points will be published when the `!validate` command is called.
+    Tweets with a net score of {config.required_score} points will be published when the `!validate` command is called.
     ```markdown
     {tweetText}
     ```
@@ -63,7 +63,7 @@ async def twitterPoll(ctx):
     tweetBot = bot.get_channel(messageObject.channel.id)  
 
     # Verify tweet integrity and return error message if needed
-    if len(tweetText) >=240:
+    if len(tweetText) >= 280:
         error = await tweetBot.send('Your tweet exceeds the maximum character length. Try again. Max 240 characters.')
         return error
 
