@@ -51,7 +51,7 @@ async def twitterPoll(ctx):
     # Bot Responds through Discord and starts the vote:
     response = f"""\n
     :fire: **Vote Started**: react with :+1:  or :-1: to publish or skip the tweet.
-    Tweets with a net socre of {config.required_score} points will be published when the `!validate` command is called.
+    Tweets with a net score of {config.required_score} points will be published when the `!validate` command is called.
     ```markdown
     {tweetText}
     ```
