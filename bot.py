@@ -8,7 +8,7 @@ from datetime import datetime
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='!', intents=discord.Intents.default())
+bot = commands.Bot(command_prefix='!', intents=discord.Intents.all()) #TODO find the right ones
 
 @bot.command(name='plznuke')
 async def validateTweets(ctx):
