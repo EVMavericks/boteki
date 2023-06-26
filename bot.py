@@ -110,13 +110,11 @@ async def validateTweets(ctx):
                 try:
                     await tweetBot.send(f"This tweet has a `net_score` of {net_score}, which is compliant with the minimum publish threshold of {config.required_score} points in favor.")
                     await tweetBot.send(f"```\n{tweet['content']}\n```")
-                    response = tweetClient.tweet_send(tweet['content'], guild)._json
-            
+                    response = tweetClient.tweet_send(tweet['content'], guild)
                     # TODO: change mongo document to include the new tweet's URL and also include the new net_score 
-                    print(f"{response['id']=}")
-                    
+
                     mongo.confirm_tweet(tweet['_id'], response)
-                    await tweetBot.send(f"Tweet above has been sent (https://twitter.com/twitter/statuses/{response['id']}) and database object updated.")
+                    await tweetBot.send(f"Tweet above has been sent. (https://twitter.com/twitter/statuses/{ response.data['id'] })")
                 except Exception as e:
                     await tweetBot.send(f"error occurred when sending tweet:\n{e}")
 
